@@ -25,11 +25,12 @@ async function robot (tasks) {
 
       for (const innerTask of task.innerTasks) {  
         console.log(`> [tasks-robot] [${index+1}/${task.innerTasks.length}] Saving ${innerTask.title}`);
+        const notes = innerTask.notes ? ` ${innerTask.notes}` : '';
         await insertIfNotExists({
           tasklist: list.id,
           requestBody : {
               title: innerTask.title,
-              notes: `Matéria - ${task.name}`,
+              notes: `Matéria - ${task.name}${notes}`,
               due: innerTask.due
           }
         }, listSaved);

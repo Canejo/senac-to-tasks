@@ -163,15 +163,27 @@ async function robot () {
                 const elementLink = await item.$('a');
 
                 const url = await getUrlLink(elementLink);
-                itensLink.push(url);
+                if (url && url.indexOf('listContent.jsp') > -1) {
+                    itensLink.push(url);
+                }
             }
 
             for (const url of itensLink) {
+
                 await page.goto(url);
 
                 const itensInner = await page.$$(classItem);
                 for (const item of itensInner) {
-                    
+                    const elementLink = await item.$('a');
+                    const url = await getUrlLink(elementLink);
+                    const text = await getTextElement(elementLink);
+
+                    if (url.indexOf('classroom.github.com') > -1) {
+                        tasks.push({
+                            title: text,
+                            notes: `Url - ${url}`
+                        });
+                    }
                 }
             }
         }
