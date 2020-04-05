@@ -19,14 +19,22 @@ async function robot () {
         let index = 0;
         for (const graduate of universityGraduate) {
             console.log(`> [senac-robot] [${index+1}/${universityGraduate.length}] Seaching tasks - ${graduate.name}`);
-            const tasksGraduate = await searchTasks(page, graduate);
-            if (tasksGraduate && tasksGraduate.length > 0) {
+
+            await page.goto(graduate.link);
+            const gradroNotas = await searchInQuadroNotas(page, graduate);
+            await page.goto(graduate.link);
+            const aulas = await searchInAulas(page, graduate);
+
+            const innerTasks = [...gradroNotas, ...aulas];
+
+            if (innerTasks && innerTasks.length > 0) {
                 tasks.push({
                     name: graduate.name,
-                    innerTasks: tasksGraduate
-                })
+                    innerTasks 
+                });
             }
-            console.log(`> [senac-robot] Found ${tasksGraduate.length} tasks`);
+
+            console.log(`> [senac-robot] Found ${gradroNotas.length} tasks`);
             index++;
         }
 
@@ -137,11 +145,42 @@ async function robot () {
         return value;
     }
 
-    async function searchTasks(page, graduate) {
+    async function searchInAulas(page, graduate) {
+        const tasks = [];
+        const tabName = 'Aulas';
+        const classItem = '.liItem.read';
+        const element = await findByLink(page, tabName);
+
+        if (element) {
+            const url = await getUrlLink(element);
+            await page.goto(url);
+
+            const itens = await page.$$(classItem);
+            const itensLink = [];
+
+            // Get links from 'Aulas'
+            for (const item of itens) {
+                const elementLink = await item.$('a');
+
+                const url = await getUrlLink(elementLink);
+                itensLink.push(url);
+            }
+
+            for (const url of itensLink) {
+                await page.goto(url);
+
+                const itensInner = await page.$$(classItem);
+                for (const item of itensInner) {
+                    
+                }
+            }
+        }
+        return tasks;
+    }
+
+    async function searchInQuadroNotas(page, graduate) {
         const tasks = [];
         const tabName = 'Quadro de Notas';
-
-        await page.goto(graduate.link);
         const element = await findByLink(page, tabName);
 
         if (element) {
