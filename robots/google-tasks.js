@@ -56,9 +56,7 @@ async function robot (tasks) {
     }
 
     async function getTaskListSenac() {
-        const listResult = await service.tasklists.list({
-            maxResults: 10
-        });
+        const listResult = await service.tasklists.list();
 
         const list = listResult.data.items.find(m => m.title === "SENAC");
 
@@ -69,11 +67,21 @@ async function robot (tasks) {
 
     async function authenticateWithOAuth() {
       let token;
+      let refreshToken = true;
       const OAuthClient = await createOAuthClient();
 
       if (fs.existsSync(TOKEN_PATH)){
         token = JSON.parse(fs.readFileSync(TOKEN_PATH, 'utf-8'));
-      } else {
+        refreshToken = false;
+        
+        if (!moment(token.expiry_date).isAfter(new Date())) {
+          console.log(`> [tasks-robot] Refresh google token`);
+          refreshToken = true;
+        }
+      }
+
+      if (refreshToken) {
+        console.log(`> [tasks-robot] New google token`);
         const webServer = await startWebServer();
         requestUserConsent(OAuthClient);
         const authorizationToken = await waitForGoogleCallback(webServer);
