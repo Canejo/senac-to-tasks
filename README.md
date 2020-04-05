@@ -16,6 +16,8 @@ Crie os arquivos de credenciais na pasta [credentials](credentials/README.md):
 
 Para executar a aplicação basta colar a seguinte linha de comando no terminal da aplicação:
 
+OBS.: Crie uma lista de tarefas com o nome SENAC na aplicação [Google Tarefas](https://play.google.com/store/apps/details?id=com.google.android.apps.tasks&hl=pt_BR)
+
 ```
 npm start
 ```
