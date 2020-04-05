@@ -71,7 +71,7 @@ async function robot (tasks) {
       const OAuthClient = await createOAuthClient();
 
       if (fs.existsSync(TOKEN_PATH)){
-        token = JSON.parse(fs.readFileSync(TOKEN_PATH, 'utf-8'));
+        token = JSON.parse(fs.readFileSync(TOKEN_PATH, 'utf8'));
         refreshToken = false;
         
         if (!moment(token.expiry_date).isAfter(new Date())) {
@@ -87,7 +87,7 @@ async function robot (tasks) {
         const authorizationToken = await waitForGoogleCallback(webServer);
         token = await requestGoogleForAccessTokens(OAuthClient, authorizationToken);
         await stopWebServer(webServer);
-        fs.writeFileSync(TOKEN_PATH, JSON.stringify(token), 'utf-8');
+        fs.writeFileSync(TOKEN_PATH, JSON.stringify(token), 'utf8');
       }
 
       setGlobalGoogleAuthentication(token);

@@ -92,7 +92,7 @@ async function robot () {
           let valueHandle = await links[i].getProperty('innerText');
           let linkText = await valueHandle.jsonValue();
           const text = getText(linkText);
-          if (linkString == text) {
+          if (linkString === text) {
             return links[i];
           }
         }
