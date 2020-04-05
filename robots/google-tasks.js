@@ -12,10 +12,11 @@ async function robot (tasks) {
     const service = google.tasks({version: 'v1', auth});
 
     console.log(`> [tasks-robot] Get "SENAC" task list`);
-    const list = await getTaskListSenac(service);
+    const tasklist = await getTaskListSenac(service);
     
     const listSaved = await service.tasks.list({
-      tasklist: list.id
+      tasklist: tasklist.id,
+      showDeleted: true
     });
     
     console.log(`> [tasks-robot] Saving tasks...`);
@@ -27,7 +28,7 @@ async function robot (tasks) {
         console.log(`> [tasks-robot] [${index+1}/${task.innerTasks.length}] Saving ${innerTask.title}`);
         const notes = innerTask.notes ? ` ${innerTask.notes}` : '';
         await insertIfNotExists({
-          tasklist: list.id,
+          tasklist: tasklist.id,
           requestBody : {
               title: innerTask.title,
               notes: `Matéria - ${task.name}${notes}`,
