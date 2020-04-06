@@ -15,7 +15,9 @@ async function robot (tasks) {
     const tasklist = await getTaskListSenac(service);
     
     const listSaved = await service.tasks.list({
-      tasklist: tasklist.id
+      tasklist: tasklist.id,
+      showDeleted: true,
+      maxResults: 1000
     });
     
     console.log(`> [tasks-robot] Saving tasks...`);

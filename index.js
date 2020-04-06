@@ -8,5 +8,5 @@ const robots = {
     await robots.tasks(tasks);
   }
   
-  start()
+  start();
   

@@ -21,11 +21,13 @@ async function robot () {
             console.log(`> [senac-robot] [${index+1}/${universityGraduate.length}] Seaching tasks - ${graduate.name}`);
 
             await page.goto(graduate.link);
-            const gradroNotas = await searchInQuadroNotas(page, graduate);
+            const gradroNotas = await searchInQuadroNotas(page);
             await page.goto(graduate.link);
-            const aulas = await searchInAulas(page, graduate);
+            const aulas = await searchInAulas(page);
+            await page.goto(graduate.link);
+            const testes = await searchInTestes(page);
 
-            const innerTasks = [...gradroNotas, ...aulas];
+            const innerTasks = [...gradroNotas, ...aulas, ...testes];
 
             if (innerTasks && innerTasks.length > 0) {
                 tasks.push({
@@ -145,7 +147,33 @@ async function robot () {
         return value;
     }
 
-    async function searchInAulas(page, graduate) {
+    async function searchInTestes(page) {
+        const tasks = [];
+        const tabName = 'Testes';
+        const element = await findByLink(page, tabName);
+
+        if (element) {
+            const url = await getUrlLink(element);
+            await page.goto(url);
+
+            const elementLink = await page.$$('a');
+
+            for (const item of elementLink) {
+                const url = await getUrlLink(item);
+                const text = await getTextElement(item);
+
+                if (url && url.indexOf('launchAssessment.jsp') > -1) {
+                    tasks.push({
+                        title: text
+                    });
+                }
+            }
+        }
+
+        return tasks;
+    }
+
+    async function searchInAulas(page) {
         const tasks = [];
         const tabName = 'Aulas';
         const classItem = '.liItem.read';
@@ -190,7 +218,7 @@ async function robot () {
         return tasks;
     }
 
-    async function searchInQuadroNotas(page, graduate) {
+    async function searchInQuadroNotas(page) {
         const tasks = [];
         const tabName = 'Quadro de Notas';
         const element = await findByLink(page, tabName);
