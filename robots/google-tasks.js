@@ -13,11 +13,12 @@ async function robot (tasks) {
 
     console.log(`> [tasks-robot] Get "SENAC" task list`);
     const tasklist = await getTaskListSenac(service);
-    
+
     const listSaved = await service.tasks.list({
       tasklist: tasklist.id,
+      showCompleted: true,
       showDeleted: true,
-      maxResults: 1000
+      maxResults: 999999
     });
     
     console.log(`> [tasks-robot] Saving tasks...`);
@@ -42,20 +43,15 @@ async function robot (tasks) {
     console.log(`> [tasks-robot] Complete`);
 
     async function insertIfNotExists(data, list) {
-      let saved, id;
+      let saved;
 
       if (list.data && list.data.items) {
         saved = list.data.items.find(m => m.title === data.requestBody.title);
       }
 
       if (!saved) {
-        const result = await service.tasks.insert(data);
-        id = result.data.id;
-      } else {
-        id = saved.id;
+        await service.tasks.insert(data);
       }
-
-      return id;
     }
 
     async function getTaskListSenac() {
