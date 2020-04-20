@@ -1,7 +1,7 @@
 {
   "name": "senac-to-tasks",
   "version": "1.0.0",
-  "description": "",
+  "description": "Projeto tenta encontrar tarefas a serem entregues no portal do Blackboard do Senac e cria tarefas no Google Tasks",
   "main": "index.js",
   "scripts": {
     "start": "node index.js"
