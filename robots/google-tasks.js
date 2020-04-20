@@ -46,11 +46,16 @@ async function robot (tasks) {
       let saved;
 
       if (list.data && list.data.items) {
-        saved = list.data.items.find(m => m.title === data.requestBody.title);
+        saved = list.data.items.find(m => 
+          m.title.trim().toLowerCase() === data.requestBody.title.trim().toLowerCase()
+        );
       }
 
       if (!saved) {
         await service.tasks.insert(data);
+        console.log(`> [tasks-robot] Saved`);
+      } else {
+        console.log(`> [tasks-robot] Skiped`);
       }
     }
 
