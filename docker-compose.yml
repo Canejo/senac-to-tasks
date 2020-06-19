@@ -1,0 +1,6 @@
+version: '1'
+
+services:
+   service:
+     image: senac-to-tasks:latest
+     restart: always
