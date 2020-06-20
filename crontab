@@ -1,0 +1,1 @@
+0 22 * * * /usr/local/bin/node /app/index.js >> /var/log/cron.log 2>&1
