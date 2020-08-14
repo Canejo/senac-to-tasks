@@ -189,10 +189,11 @@ async function robot () {
             // Get links from 'Aulas'
             for (const item of itens) {
                 const elementLink = await item.$('a');
-
-                const url = await getUrlLink(elementLink);
-                if (url && url.indexOf('listContent.jsp') > -1) {
-                    itensLink.push(url);
+                if (elementLink) {
+                    const url = await getUrlLink(elementLink);
+                    if (url && url.indexOf('listContent.jsp') > -1) {
+                        itensLink.push(url);
+                    }
                 }
             }
 
@@ -203,14 +204,16 @@ async function robot () {
                 const itensInner = await page.$$(classItem);
                 for (const item of itensInner) {
                     const elementLink = await item.$('a');
-                    const url = await getUrlLink(elementLink);
-                    const text = await getTextElement(elementLink);
+                    if (elementLink) {
+                        const url = await getUrlLink(elementLink);
+                        const text = await getTextElement(elementLink);
 
-                    if (url.indexOf('classroom.github.com') > -1) {
-                        tasks.push({
-                            title: text,
-                            notes: `Url - ${url}`
-                        });
+                        if (url.indexOf('classroom.github.com') > -1) {
+                            tasks.push({
+                                title: text,
+                                notes: `Url - ${url}`
+                            });
+                        }
                     }
                 }
             }
