@@ -28,6 +28,7 @@ File: `senac-blackboard.json`
 ```
 {
     "user": "e-mail",
-    "password": "senha"
+    "password": "senha",
+	"codeCourse": "0000"
 }
 ```

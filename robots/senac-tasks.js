@@ -1,5 +1,6 @@
 const puppeteer = require('puppeteer');
 const moment = require('moment');
+const credentials = require('../credentials/senac-blackboard.json');
 
 async function robot () {
     const browser = await puppeteer.launch({
@@ -50,7 +51,6 @@ async function robot () {
     }
 
     async function singIn() {
-        const credentials = require('../credentials/senac-blackboard.json');
         const page = await browser.newPage();
         await page.goto("https://www.sp.senac.br/login/Login");
 
@@ -78,10 +78,13 @@ async function robot () {
         for (const element of links) {
             const link = await getUrlLink(element);
             if (link) {
-                universityGraduate.push({
-                    name: await getTextElement(page, element),
-                    link
-                });
+                const name = await getTextElement(page, element);
+                if (name.indexOf(credentials.codeCourse) > -1) {
+                    universityGraduate.push({
+                        name,
+                        link
+                    });
+                }
             }
         }
         return universityGraduate;
